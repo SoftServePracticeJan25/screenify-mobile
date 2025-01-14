@@ -1,5 +1,5 @@
 #Environment file
-*.env
+
 
 # Miscellaneous
 *.class
@@ -17,6 +17,7 @@ migrate_working_dir/
 
 # IntelliJ related
 *.iml
+*.env
 *.ipr
 *.iws
 .idea/
