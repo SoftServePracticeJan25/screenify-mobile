@@ -1,15 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:screenify/core/injection/dependency_injection.dart';
+import 'package:screenify/features/movie/presentation/blocs/app_bloc/app_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:screenify/features/movie/presentation/screens/home_screen_wrapper.dart';
+import 'package:screenify/features/movie/presentation/screens/login_screen.dart';
 
-void main() {
-  const String s = String.fromEnvironment("API_KEY");
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  injectDependencies();
+  runApp(const Screenify());
+}
 
-  runApp(
-    MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(s),
+class Screenify extends StatelessWidget {
+  const Screenify({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AppBloc>(
+          create: (_) => AppBloc(),
         ),
+        BlocProvider<AuthBloc>(
+          create: (_) => AuthBloc()..add(const CheckEvent()),
+        ),
+      ],
+      child: BlocBuilder<AppBloc, AppState>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            locale: state.locale,
+            darkTheme: ThemeData.dark(),
+            theme: ThemeData.light(),
+            themeMode: state.themeMode,
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            localeResolutionCallback: (locale, supportedLocales) {
+              if (locale != null && locale.languageCode == 'uk') {
+                context.read<AppBloc>().add(const ChangeLocaleEvent('uk'));
+                return const Locale('uk');
+              } else {
+                context.read<AppBloc>().add(const ChangeLocaleEvent('en'));
+                return const Locale('en');
+              }
+            },
+            home: BlocConsumer<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is AuthFailed) {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.message)));
+                }
+              },
+              builder: (context, state) {
+                if (state is AuthLoaded) {
+                  return const HomeScreenWrapper();
+                } else if (state is AuthLoading) {
+                  return Scaffold(
+                      body: const CircularProgressIndicator.adaptive());
+                } else {
+                  return const LoginScreen();
+                }
+              },
+            ),
+          );
+        },
       ),
-    ),
-  );
+    );
+  }
 }
