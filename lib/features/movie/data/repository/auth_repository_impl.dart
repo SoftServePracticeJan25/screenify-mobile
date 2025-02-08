@@ -6,6 +6,7 @@ import 'package:screenify/features/movie/data/mappers/auth_response_mapper.dart'
 import 'package:screenify/features/movie/data/mappers/login_request_mapper.dart';
 import 'package:screenify/features/movie/data/mappers/register_request_mapper.dart';
 import 'package:screenify/features/movie/data/mappers/user_info_mapper.dart';
+import 'package:screenify/features/movie/data/models/auth_error_model.dart';
 import 'package:screenify/features/movie/data/models/auth_response_model.dart';
 import 'package:screenify/features/movie/data/models/user_info_model.dart';
 import 'package:screenify/features/movie/domain/entities/auth_response.dart';
@@ -39,6 +40,8 @@ class AuthRepositoryImpl implements AuthRepository {
         return DataSuccess(
           AuthResponseMapper.toEntity(AuthResponseModel.fromJson(jsonData)),
         );
+      } else if (response.statusCode == 401) {
+        return DataFailure(AuthErrorModel.fromJson(response.body).error);
       } else {
         return DataFailure(response.reasonPhrase ?? "Unknown error");
       }
@@ -93,6 +96,8 @@ class AuthRepositoryImpl implements AuthRepository {
         return DataSuccess(
           AuthResponseMapper.toEntity(AuthResponseModel.fromJson(jsonData)),
         );
+      } else if (response.statusCode == 400) {
+        return DataFailure(AuthErrorModel.fromJson(response.body).error);
       } else {
         return DataFailure(response.reasonPhrase ?? "Unknown error");
       }
@@ -105,7 +110,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<DataState<UserInfo>> getUserInfo(String refreshToken) async {
     try {
       final response = await client.get(
-        Uri.parse('$_authUrl/get-user-info'),
+        Uri.parse('$_authUrl/user-info'),
         headers: {
           'Content-Type': 'application/json',
           'Authorisation': 'Bearer $refreshToken',

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:screenify/config/theme/app_theme.dart';
 import 'package:screenify/core/injection/dependency_injection.dart';
 import 'package:screenify/features/movie/presentation/blocs/app_bloc/app_bloc.dart';
 import 'package:screenify/features/movie/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:screenify/features/movie/presentation/screens/home_screen_wrapper.dart';
-import 'package:screenify/features/movie/presentation/screens/login_screen.dart';
+import 'package:screenify/features/movie/presentation/screens/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +34,8 @@ class Screenify extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             locale: state.locale,
-            darkTheme: ThemeData.dark(),
-            theme: ThemeData.light(),
+            darkTheme: AppTheme.dark,
+            theme: AppTheme.light,
             themeMode: state.themeMode,
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
@@ -63,10 +64,11 @@ class Screenify extends StatelessWidget {
                 if (state is AuthLoaded) {
                   return const HomeScreenWrapper();
                 } else if (state is AuthLoading) {
-                  return Scaffold(
-                      body: const CircularProgressIndicator.adaptive());
+                  return const Scaffold(
+                    body: CircularProgressIndicator.adaptive(),
+                  );
                 } else {
-                  return const LoginScreen();
+                  return const WelcomeScreen();
                 }
               },
             ),
