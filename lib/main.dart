@@ -53,14 +53,8 @@ class Screenify extends StatelessWidget {
               }
             },
             home: BlocConsumer<AuthBloc, AuthState>(
-              listener: (context, state) {
-                if (state is AuthFailed) {
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(state.message)));
-                }
-              },
               builder: (context, state) {
+
                 if (state is AuthLoaded) {
                   return const HomeScreenWrapper();
                 } else if (state is AuthLoading) {
@@ -69,6 +63,13 @@ class Screenify extends StatelessWidget {
                   );
                 } else {
                   return const WelcomeScreen();
+                }
+              },
+              listener: (context, state) {
+                if (state is AuthFailed) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.message)));
                 }
               },
             ),

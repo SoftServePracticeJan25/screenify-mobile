@@ -70,7 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
         final userInfo =
-            await authRepository.getUserInfo(authData.refreshToken);
+            await authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -86,6 +86,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _onLoggedIn(LoginEvent event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
+
     try {
       final authResponse = await authRepository.login(
         LoginRequest(username: event.username, password: event.password),
@@ -95,8 +96,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         secureStorageService
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
+
         final userInfo =
-            await authRepository.getUserInfo(authData.refreshToken);
+            await authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -124,7 +126,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
         final userInfo =
-            await authRepository.getUserInfo(authData.refreshToken);
+            await authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {

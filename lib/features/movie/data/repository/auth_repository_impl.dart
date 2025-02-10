@@ -113,7 +113,7 @@ class AuthRepositoryImpl implements AuthRepository {
         Uri.parse('$_authUrl/user-info'),
         headers: {
           'Content-Type': 'application/json',
-          'Authorisation': 'Bearer $refreshToken',
+          'Authorization': 'Bearer $refreshToken',
         },
       );
       if (response.statusCode >= 200 && response.statusCode <= 300) {

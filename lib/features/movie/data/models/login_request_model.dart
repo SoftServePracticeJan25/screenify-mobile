@@ -8,14 +8,14 @@ class LoginRequestModel extends Equatable {
 
   factory LoginRequestModel.fromJson(Map<String, dynamic> json) {
     return LoginRequestModel(
-      username: json['username'],
+      username: json['userName'],
       password: json['password'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'username': username,
+      'userName': username,
       'password': password,
     };
   }

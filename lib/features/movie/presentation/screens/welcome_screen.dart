@@ -1,56 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:screenify/config/constants/image_path.dart';
-import 'package:screenify/config/theme/custom_themes/app_elevated_button_theme.dart';
-import 'package:screenify/features/movie/presentation/shared/buttons/welcome_screen_log_in_button.dart';
-import 'package:screenify/features/movie/presentation/shared/buttons/welcome_screen_sign_up_button.dart';
+import 'package:screenify/config/constants/app_images.dart';
+import 'package:screenify/features/movie/presentation/screens/login_screen.dart';
+import 'package:screenify/features/movie/presentation/screens/register_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(AppImages.welcomeScreenBackground),
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(AppImages.welcomeScreenBackground),
+          ),
         ),
-      ),
-      child: Scaffold(
-        body: Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 200),
               Image.asset(
-                AppImages.appLogo,
+                AppImages.bigLogo,
                 height: MediaQuery.sizeOf(context).height / 5,
                 width: MediaQuery.sizeOf(context).height / 5,
               ),
               const SizedBox(height: 3),
               Text(
-                style: Theme.of(context).textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w600,
-                  fontSize: 48, fontFamily: "Poppins",),
+                style: Theme.of(context).textTheme.displayLarge,
                 "screenify",
               ),
               const SizedBox(height: 9),
               Text(
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.w500,
-                  fontSize: 30,fontFamily: "Roboto",),
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 30,
+                      fontFamily: "Roboto",
+                    ),
                 "Your pocket ticketing app",
               ),
               const Spacer(),
-              WelcomeScreenSignUpButton(onPressed: () {}, text: "Sign up"),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const RegisterScreen(),
+                    ),
+                  );
+                },
+                child: const Text("Sign up"),
+              ),
               const SizedBox(height: 30),
-              WelcomeScreenLogInButton(onPressed: () {}, text: "Log in"),
-              const SizedBox(height: 34),
-              Image.asset(AppImages.userCircleLightFilled),
+              OutlinedButton(
+                onPressed: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const LoginScreen(),
+                    ),
+                  );
+                },
+                child: const Text("Log in"),
+              ),
               const SizedBox(height: 34),
             ],
           ),
         ),
-        backgroundColor: Colors.transparent,
       ),
     );
   }
