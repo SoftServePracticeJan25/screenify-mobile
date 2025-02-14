@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:screenify/core/datasource/data_state.dart';
 import 'package:screenify/features/movie/domain/entities/auth_response.dart';
 import 'package:screenify/features/movie/domain/entities/login_request.dart';
@@ -12,4 +13,7 @@ abstract class AuthRepository {
   Future<DataState<AuthResponse>> refreshToken(String refreshToken);
 
   Future<DataState<UserInfo>> getUserInfo(String refreshToken);
+
+
+  Future<DataState<UserInfo>> uploadAvatar(XFile file);
 }

@@ -1,0 +1,42 @@
+{
+  "settings": "Settings",
+  "welcomeScreenSlogan": "Your pocket ticketing app",
+  "signUp": "Sign up",
+  "logIn": "Log in",
+  "username": "Username",
+  "password": "Password",
+  "email": "Email",
+  "repeatPassword": "Repeat password",
+  "home": "Home",
+  "passwordsDidNotMatch": "Passwords didn't match",
+  "pleaseEnterTheUsername": "Please enter the username",
+  "pleaseEnterThePassword": "Please enter the password",
+  "pleaseEnterTheEmail": "Please enter the email",
+  "pleaseEnterValidEmail": "Please enter valid email",
+  "pleaseEnterValidPassword": "Please enter valid password",
+  "tickets": "Tickets",
+  "chooseYourMovie": "Choose your movie",
+  "chooseSession": "Choose session",
+  "createYourAccount": "Create your account",
+  "checkYourTickets": "Check your tickets",
+  "buyTicket": "Buy ticket",
+  "english": "English",
+  "ukrainian": "Ukrainian",
+  "language": "Language",
+  "theme": "Theme",
+  "dark": "Dark",
+  "light": "Light",
+  "system": "System",
+  "hi": "Hi, {username}",
+  "accountSettings": "Account settings",
+  "appSettings": "App settings",
+  "logOut": "Log out",
+  "@hi": {
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "Bob"
+      }
+    }
+  }
+}

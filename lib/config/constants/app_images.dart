@@ -17,4 +17,8 @@ class AppImages {
   static const String ticketsDarkFilled =
       'assets/images/tickets_dark_filled.png';
   static const String homeDarkFilled = 'assets/images/home_dark_filled.png';
+  static const String mainBackgroundDark =
+      'assets/images/main_background_dark.png';
+  static const String mainBackgroundLight =
+      'assets/images/main_background_light.png';
 }

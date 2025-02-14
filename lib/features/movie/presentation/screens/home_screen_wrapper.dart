@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:screenify/config/constants/app_images.dart';
-import 'package:screenify/features/movie/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/movie_bloc/movie_bloc.dart';
+import 'package:screenify/features/movie/presentation/screens/home_screen.dart';
+import 'package:screenify/features/movie/presentation/screens/settings_screen.dart';
+import 'package:screenify/features/movie/presentation/screens/tickets_screen.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
   const HomeScreenWrapper({super.key});
@@ -13,17 +15,22 @@ class HomeScreenWrapper extends StatefulWidget {
 
 class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
   int _indexValue = 0;
+  final List<Widget> _screens = const [
+    HomeScreen(),
+    TicketsScreen(),
+    SettingsScreen(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<MovieBloc>().add(const GetAllMoviesEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: IconButton(
-            onPressed: () {
-              context.read<AuthBloc>().add(const LogoutEvent());
-            },
-            icon: const Icon(Icons.logout,),),
-      ),
+      body: _screens[_indexValue],
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
           setState(

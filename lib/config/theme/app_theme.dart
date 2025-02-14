@@ -10,6 +10,7 @@ class AppTheme {
   const AppTheme._();
 
   static ThemeData light = ThemeData(
+    primaryColor: AppColors.whiteColor,
     fontFamily: "Roboto",
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.whiteColor,
@@ -23,6 +24,7 @@ class AppTheme {
   );
 
   static ThemeData dark = ThemeData(
+    primaryColor: AppColors.darkBlue,
     fontFamily: "Roboto",
     brightness: Brightness.dark,
     shadowColor: AppColors.whiteColor,

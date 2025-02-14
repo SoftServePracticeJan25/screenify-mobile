@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
+import 'package:icons_plus/icons_plus.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:screenify/core/datasource/data_state.dart';
 import 'package:screenify/features/movie/data/services/secure_storage_service.dart';
 import 'package:screenify/features/movie/domain/entities/login_request.dart';
@@ -20,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository = GetIt.I<AuthRepository>();
 
   AuthBloc() : super(const AuthInitial()) {
+    on<UploadAvatarEvent>(_onAvatarUploaded);
     on<CheckEvent>(_onChecked);
     on<RegisterEvent>(_onRegistered);
     on<LoginEvent>(_onLoggedIn);
@@ -31,6 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     LogoutEvent event,
     Emitter<AuthState> emit,
   ) async {
+    emit(const AuthLoading());
     await secureStorageService.deleteTokens();
     emit(const AuthInitial());
   }
@@ -69,8 +73,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         secureStorageService
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
-        final userInfo =
-            await authRepository.getUserInfo(authData.accessToken);
+        final userInfo = await authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -97,8 +100,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
 
-        final userInfo =
-            await authRepository.getUserInfo(authData.accessToken);
+        final userInfo = await authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -125,8 +127,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         secureStorageService
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
-        final userInfo =
-            await authRepository.getUserInfo(authData.accessToken);
+        final userInfo = await authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -137,6 +138,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(AuthFailed(message: e.toString()));
+    }
+  }
+
+  FutureOr<void> _onAvatarUploaded(
+    UploadAvatarEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final userInfo = await authRepository.uploadAvatar(event.file);
+    if (userInfo is DataSuccess) {
+      emit(AuthLoaded(userInfo: userInfo.data!));
     }
   }
 }

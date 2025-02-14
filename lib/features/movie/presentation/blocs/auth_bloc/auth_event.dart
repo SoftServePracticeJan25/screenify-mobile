@@ -51,3 +51,11 @@ class LogoutEvent extends AuthEvent {
   @override
   List<Object?> get props => [];
 }
+
+class UploadAvatarEvent extends AuthEvent{
+  final XFile file;
+  const UploadAvatarEvent({required this.file});
+
+  @override
+  List<Object?> get props => [file];
+}

@@ -5,6 +5,11 @@ class AppTextTheme {
   const AppTextTheme._();
 
   static TextTheme lightTextTheme = TextTheme(
+    headlineLarge: const TextStyle().copyWith(
+      fontWeight: FontWeight.w500,
+      fontSize: 30,
+      fontFamily: "Roboto",
+    ),
     displayLarge: const TextStyle().copyWith(
       fontFamily: "Poppins",
       fontSize: 48,
@@ -14,7 +19,6 @@ class AppTextTheme {
     titleLarge: const TextStyle().copyWith(
       fontSize: 20,
       fontWeight: FontWeight.w500,
-      color: const Color(0xFFFFFFFF),
     ),
     labelLarge:
         const TextStyle().copyWith(fontSize: 24, fontWeight: FontWeight.w500),
@@ -26,27 +30,39 @@ class AppTextTheme {
   );
 
   static TextTheme darkTextTheme = TextTheme(
+    headlineLarge: const TextStyle().copyWith(
+      fontWeight: FontWeight.w500,
+      fontSize: 30,
+      fontFamily: "Roboto",
+      color: AppColors.whiteColor,
+    ),
     headlineMedium: const TextStyle().copyWith(
       fontFamily: "Nunito",
       fontSize: 28,
       fontWeight: FontWeight.w700,
-      color: const Color(0xFFFFFFFF),
+      color: AppColors.white80,
+    ),
+    headlineSmall: const TextStyle().copyWith(
+      fontFamily: "Nunito",
+      fontSize: 24,
+      fontWeight: FontWeight.w700,
+      color: AppColors.white80,
     ),
     displayLarge: const TextStyle().copyWith(
       fontFamily: "Poppins",
       fontSize: 48,
       fontWeight: FontWeight.w500,
-      color: const Color(0xFFFFFFFF),
+      color: AppColors.whiteColor,
     ),
     titleLarge: const TextStyle().copyWith(
       fontSize: 20,
       fontWeight: FontWeight.w500,
-      color: const Color(0xFFFFFFFF),
+      color: AppColors.whiteColor,
     ),
     titleMedium: const TextStyle().copyWith(
       fontSize: 16,
       fontWeight: FontWeight.w400,
-      color: const Color(0xFFFFFFFF),
+      color: AppColors.whiteColor,
     ),
     labelLarge:
         const TextStyle().copyWith(fontSize: 24, fontWeight: FontWeight.w500),

@@ -6,6 +6,7 @@ import 'package:screenify/core/injection/dependency_injection.dart';
 import 'package:screenify/features/movie/presentation/blocs/app_bloc/app_bloc.dart';
 import 'package:screenify/features/movie/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:screenify/features/movie/presentation/blocs/movie_bloc/movie_bloc.dart';
 import 'package:screenify/features/movie/presentation/screens/home_screen_wrapper.dart';
 import 'package:screenify/features/movie/presentation/screens/welcome_screen.dart';
 
@@ -28,6 +29,9 @@ class Screenify extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (_) => AuthBloc()..add(const CheckEvent()),
         ),
+        BlocProvider<MovieBloc>(
+          create: (_) => MovieBloc(),
+        ),
       ],
       child: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
@@ -38,6 +42,7 @@ class Screenify extends StatelessWidget {
             theme: AppTheme.light,
             themeMode: state.themeMode,
             localizationsDelegates: [
+              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -54,22 +59,30 @@ class Screenify extends StatelessWidget {
             },
             home: BlocConsumer<AuthBloc, AuthState>(
               builder: (context, state) {
-
                 if (state is AuthLoaded) {
                   return const HomeScreenWrapper();
-                } else if (state is AuthLoading) {
-                  return const Scaffold(
-                    body: CircularProgressIndicator.adaptive(),
-                  );
                 } else {
                   return const WelcomeScreen();
                 }
               },
-              listener: (context, state) {
+              listener: (context, state) async {
                 if (state is AuthFailed) {
+                  print(state.message);
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.message)));
+                } else if (state is AuthLoading) {
+                  await showDialog(
+                    context: context,
+                    builder: (_) {
+                      return const CircularProgressIndicator.adaptive();
+                    },
+                  );
+                } else {
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.pop(context);
+                  }
                 }
               },
             ),

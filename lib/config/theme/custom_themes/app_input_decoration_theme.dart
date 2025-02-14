@@ -9,24 +9,46 @@ class AppInputDecorationTheme {
     prefixIconColor: WidgetStateColor.resolveWith(
       (states) {
         if (states.contains(WidgetState.focused)) {
-          return AppColors.whiteColor;
+          return AppColors.darkBlue;
         }
-        return AppColors.white80;
+        return AppColors.lightPurple80;
       },
     ),
-    focusColor: AppColors.whiteColor,
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(45),
+      borderSide: const BorderSide(
+        width: 1,
+        color: AppColors.lightPurple80,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(45),
+      borderSide: const BorderSide(
+        width: 1,
+        color: AppColors.darkBlue,
+      ),
+    ),
+    focusColor: AppColors.darkBlue,
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(45),
       borderSide: const BorderSide(
         width: 1,
-        color: AppColors.white80,
+        color: AppColors.lightPurple80,
       ),
+    ),
+    suffixIconColor: WidgetStateColor.resolveWith(
+          (states) {
+        if (states.contains(WidgetState.focused)) {
+          return AppColors.darkBlue;
+        }
+        return AppColors.lightPurple80;
+      },
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(45),
       borderSide: const BorderSide(
         width: 1,
-        color: AppColors.whiteColor,
+        color: AppColors.darkBlue,
       ),
     ),
   );
@@ -40,6 +62,28 @@ class AppInputDecorationTheme {
         }
         return AppColors.white80;
       },
+    ),
+    suffixIconColor: WidgetStateColor.resolveWith(
+      (states) {
+        if (states.contains(WidgetState.focused)) {
+          return AppColors.whiteColor;
+        }
+        return AppColors.white80;
+      },
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(45),
+      borderSide: const BorderSide(
+        width: 1,
+        color: AppColors.whiteColor,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(45),
+      borderSide: const BorderSide(
+        width: 1,
+        color: AppColors.whiteColor,
+      ),
     ),
     focusColor: AppColors.whiteColor,
     enabledBorder: OutlineInputBorder(

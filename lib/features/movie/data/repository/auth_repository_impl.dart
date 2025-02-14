@@ -1,6 +1,7 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:screenify/core/datasource/data_state.dart';
 import 'package:screenify/features/movie/data/mappers/auth_response_mapper.dart';
 import 'package:screenify/features/movie/data/mappers/login_request_mapper.dart';
@@ -9,11 +10,14 @@ import 'package:screenify/features/movie/data/mappers/user_info_mapper.dart';
 import 'package:screenify/features/movie/data/models/auth_error_model.dart';
 import 'package:screenify/features/movie/data/models/auth_response_model.dart';
 import 'package:screenify/features/movie/data/models/user_info_model.dart';
+import 'package:screenify/features/movie/data/services/secure_storage_service.dart';
 import 'package:screenify/features/movie/domain/entities/auth_response.dart';
 import 'package:screenify/features/movie/domain/entities/login_request.dart';
 import 'package:screenify/features/movie/domain/entities/register_request.dart';
 import 'package:screenify/features/movie/domain/entities/user_info.dart';
 import 'package:screenify/features/movie/domain/repository/auth_repository.dart';
+import "package:http_parser/http_parser.dart" show MediaType;
+
 
 class AuthRepositoryImpl implements AuthRepository {
   final Client client;
@@ -124,6 +128,42 @@ class AuthRepositoryImpl implements AuthRepository {
         );
       } else {
         return DataFailure(response.reasonPhrase ?? "Unknown error");
+      }
+    } catch (e) {
+      return DataFailure(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<UserInfo>> uploadAvatar(XFile file) async {
+    try {
+      final url = Uri.parse("$_baseUrl/api/user/upload-avatar");
+      final service = SecureStorageService();
+      final token = await service.readToken();
+      MultipartRequest request = MultipartRequest(
+        "POST",
+        url,
+      );
+      final Uint8List bytes = await file.readAsBytes();
+      final myFile = MultipartFile(
+        "file",
+        ByteStream.fromBytes(bytes),
+        bytes.length,
+        filename: file.name,
+        contentType: MediaType("image", "png"),
+      );
+      request.headers['Authorization'] = 'Bearer $token';
+      request.files.add(myFile);
+      final responses = await request.send();
+      if (responses.statusCode >= 200 && responses.statusCode <= 300) {
+        final response = await Response.fromStream(responses);
+        return DataSuccess(
+          UserInfoMapper.toEntity(
+            UserInfoModel.fromJson(jsonDecode(response.body)),
+          ),
+        );
+      } else {
+        return DataFailure(responses.reasonPhrase ?? "Unknown error");
       }
     } catch (e) {
       return DataFailure(e.toString());

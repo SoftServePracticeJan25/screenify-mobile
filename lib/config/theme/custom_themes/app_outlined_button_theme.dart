@@ -15,11 +15,11 @@ class AppOutlinedButtonTheme {
             (Set<WidgetState> states) {
           if (states.contains(WidgetState.pressed)) {
             return const BorderSide(
-              color: AppColors.darkButtonPressedColor,
+              color: AppColors.lightButtonPressedColor,
               width: 2.0,
             );
           }
-          return const BorderSide(color: AppColors.whiteColor, width: 2.0);
+          return const BorderSide(color: AppColors.lightPurple80, width: 2.0);
         },
       ),
       foregroundColor: WidgetStateProperty.resolveWith<Color>(
@@ -27,7 +27,7 @@ class AppOutlinedButtonTheme {
           if (states.contains(WidgetState.pressed)) {
             return AppColors.darkButtonPressedColor;
           }
-          return AppColors.whiteColor;
+          return AppColors.lightPurple80;
         },
       ),
     ),
