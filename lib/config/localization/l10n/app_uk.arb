@@ -49,5 +49,8 @@
   "profile": "Профіль",
   "screen": "Екран",
   "seat": "Місце",
-  "price": "Ціна"
+  "price": "Ціна",
+  "time": "Час",
+  "thankYouForPurchase": "Дякуємо за покупку",
+  "recommended": "Рекомендовані"
 }

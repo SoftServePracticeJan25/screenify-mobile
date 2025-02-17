@@ -68,6 +68,9 @@ class SettingsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(
+                  height: 50,
+                ),
                 GestureDetector(
                   onTap: () async {
                     await _takePhoto(context);
@@ -99,11 +102,11 @@ class SettingsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: AppColors.whiteColor.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           width: 2,
-                          color: AppColors.black20,
+                          color: AppColors.lightPurple80,
                         ),
                       ),
                       child: Column(
@@ -144,11 +147,11 @@ class SettingsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           width: 2,
-                          color: AppColors.black20,
+                          color: AppColors.lightPurple80,
                         ),
                       ),
                       child: Column(

@@ -38,6 +38,7 @@ class TicketRepositoryImpl implements TicketRepository {
                 .toList();
         return DataSuccess(tickets);
       } else {
+
         return DataFailure(response.reasonPhrase ?? "Unknown error");
       }
     } catch (e) {
@@ -55,11 +56,6 @@ class TicketRepositoryImpl implements TicketRepository {
       final service = SecureStorageService();
       final token = await service.readToken();
       final url = Uri.parse(_ticketUrl);
-      print(jsonEncode({
-        'seatNum': seatNum,
-        'transactionId': transactionId,
-        'sessionId': sessionId,
-      }),);
       final response = await client.post(
         url,
         headers: {
@@ -72,8 +68,9 @@ class TicketRepositoryImpl implements TicketRepository {
           'sessionId': sessionId,
         }),
       );
-      print(response.body);
+
       if (response.statusCode >= 200 && response.statusCode <= 300) {
+
         return DataSuccess(
           TicketMapper.toEntity(
             TicketModel.fromJson(
@@ -82,9 +79,11 @@ class TicketRepositoryImpl implements TicketRepository {
           ),
         );
       } else {
+
         return DataFailure(response.reasonPhrase ?? "Unknown error");
       }
     } catch (e) {
+
       return DataFailure(e.toString());
     }
   }

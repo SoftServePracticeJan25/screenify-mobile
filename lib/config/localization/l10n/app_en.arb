@@ -46,10 +46,13 @@
   "title": "Title",
   "room":"Room",
   "date": "Date",
+  "thankYouForPurchase": "Thank you for purchase",
   "profile":"Profile",
   "screen": "Screen",
   "seat": "Seat",
   "price": "Price",
+  "time":"Time",
+  "recommended": "Recommended",
   "@hi": {
     "placeholders": {
       "username": {

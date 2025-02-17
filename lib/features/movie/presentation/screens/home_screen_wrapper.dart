@@ -33,6 +33,12 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _indexValue == 1
+          ? AppBar(
+        backgroundColor: Colors.transparent,
+              title: Text(AppLocalizations.of(context)!.checkYourTickets),
+            )
+          : null,
       body: _screens[_indexValue],
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {

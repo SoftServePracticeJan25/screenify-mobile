@@ -35,3 +35,11 @@ final class TicketLoaded extends TicketState {
   @override
   List<Object> get props => [tickets];
 }
+
+
+final class TicketBought extends TicketState {
+  const TicketBought();
+
+  @override
+  List<Object> get props => [];
+}

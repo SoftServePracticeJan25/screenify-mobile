@@ -6,6 +6,7 @@ class TicketMapper {
 
   static Ticket toEntity(TicketModel model) {
     return Ticket(
+      posterUrl: model.posterUrl,
       id: model.id,
       seatNum: model.seatNum,
       transactionId: model.transactionId,
@@ -23,6 +24,7 @@ class TicketMapper {
 
   static TicketModel toModel(Ticket entity) {
     return TicketModel(
+      posterUrl: entity.posterUrl,
       id: entity.id,
       seatNum: entity.seatNum,
       transactionId: entity.transactionId,

@@ -13,9 +13,11 @@ class TicketModel extends Equatable {
   final String title;
   final double price;
   final String roomName;
+  final String posterUrl;
 
   factory TicketModel.fromJson(Map<String, dynamic> json) {
     return TicketModel(
+      posterUrl: json['posterUrl'],
       id: json['id'],
       seatNum: json['seatNum'],
       transactionId: json['transactionId'],
@@ -32,6 +34,7 @@ class TicketModel extends Equatable {
   }
 
   const TicketModel({
+    required this.posterUrl,
     required this.id,
     required this.seatNum,
     required this.transactionId,
@@ -46,19 +49,24 @@ class TicketModel extends Equatable {
     required this.roomName,
   });
 
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'id': id,
-  //     'seatNum': seatNum,
-  //     'transactionId': transactionId,
-  //     'sessionId': sessionId,
-  //   };
-  // }
-
   static List<TicketModel> toJsonList(List<dynamic> jsonList) {
     return jsonList.map((e) => TicketModel.fromJson(e)).toList();
   }
 
   @override
-  List<Object?> get props => [id, seatNum, transactionId, sessionId];
+  List<Object?> get props => [
+        id,
+        seatNum,
+        transactionId,
+        sessionId,
+        userId,
+        movieId,
+        posterUrl,
+        title,
+        price,
+        roomName,
+        duration,
+        startTime,
+        transactionTime,
+      ];
 }

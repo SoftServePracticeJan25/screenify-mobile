@@ -13,8 +13,10 @@ class Ticket extends Equatable {
   final String title;
   final int price;
   final String roomName;
+  final String posterUrl;
 
   const Ticket({
+    required this.posterUrl,
     required this.id,
     required this.seatNum,
     required this.transactionId,
@@ -44,5 +46,6 @@ class Ticket extends Equatable {
         title,
         price,
         roomName,
+        posterUrl,
       ];
 }

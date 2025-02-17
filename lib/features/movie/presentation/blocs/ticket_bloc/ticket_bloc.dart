@@ -36,12 +36,12 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
       ),
     );
     if (response is DataSuccess) {
+      emit(const TicketBought());
       ticketsList.add(response.data!);
       emit(TicketLoaded(tickets: ticketsList));
     } else {
 
       emit(TicketFailed(message: response.message ?? "Unknown bloc error"));
-      print((state as TicketFailed).message);
     }
   }
 

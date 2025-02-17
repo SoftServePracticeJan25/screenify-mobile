@@ -63,114 +63,138 @@ class _SessionScreenState extends State<SessionScreen> {
                     itemCount: state.sessions.length,
                     itemBuilder: (context, index) {
                       final session = state.sessions[index];
-                      return InkWell(
-                        onTap: () async {
-                          final ticketBloc = context.read<TicketBloc>();
-                          final res = await showDialog<int>(
-                            context: context,
-                            builder: (context) {
-                              return BuyTicketDialog(
-                                session: session,
-                              );
-                            },
-                          );
-                          if (res == null) return;
-                          ticketBloc.add(
-                            CreateTicketEvent(
-                              seatNum: res,
-                              sessionId: session.id,
-                              transactionId: (context
-                                      .read<TransactionBloc>()
-                                      .state as TransactionLoaded)
-                                  .transaction
-                                  .id,
-                            ),
-                          );
+                      return BlocListener<TicketBloc, TicketState>(
+                        listener: (context, state) {
+                          if (state is TicketBought) {
+                            ScaffoldMessenger.of(context)
+                                .hideCurrentMaterialBanner();
+                            ScaffoldMessenger.of(context)
+                                .showMaterialBanner(MaterialBanner(
+                              content: Text(
+                                AppLocalizations.of(context)!
+                                    .thankYouForPurchase,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: ScaffoldMessenger.of(context)
+                                      .hideCurrentMaterialBanner,
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ));
+                          }
                         },
-                        child: Row(
-                          children: [
-                            Image.network(
-                              widget.movie.posterUrl,
-                              width: MediaQuery.sizeOf(context).width / 3.5,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  spacing: 5,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!.title,
-                                        ),
-                                        Text(
-                                          widget.movie.title,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .duration,
-                                        ),
-                                        Text(
-                                          formatDuration(widget.movie.duration),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!.date,
-                                        ),
-                                        Text(
-                                          DateFormat.yMd(
-                                            PlatformDispatcher.instance.locale
-                                                .toString(),
-                                          ).format(
-                                            session.startTime,
+                        child: InkWell(
+                          onTap: () async {
+                            final ticketBloc = context.read<TicketBloc>();
+                            final res = await showDialog<int>(
+                              context: context,
+                              builder: (context) {
+                                return BuyTicketDialog(
+                                  session: session,
+                                );
+                              },
+                            );
+                            if (res == null) return;
+                            ticketBloc.add(
+                              CreateTicketEvent(
+                                seatNum: res,
+                                sessionId: session.id,
+                                transactionId: (context
+                                        .read<TransactionBloc>()
+                                        .state as TransactionLoaded)
+                                    .transaction
+                                    .id,
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Image.network(
+                                widget.movie.posterUrl,
+                                width: MediaQuery.sizeOf(context).width / 3.5,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    spacing: 5,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)!.title,
                                           ),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!.room,
-                                        ),
-                                        Text(
-                                          session.roomName,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                          Text(
+                                            widget.movie.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)!
+                                                .duration,
+                                          ),
+                                          Text(
+                                            formatDuration(
+                                                widget.movie.duration),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)!.date,
+                                          ),
+                                          Text(
+                                            DateFormat.yMd(
+                                              PlatformDispatcher.instance.locale
+                                                  .toString(),
+                                            ).format(
+                                              session.startTime,
+                                            ),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)!.room,
+                                          ),
+                                          Text(
+                                            session.roomName,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },

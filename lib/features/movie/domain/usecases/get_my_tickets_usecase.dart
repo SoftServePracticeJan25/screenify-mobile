@@ -14,6 +14,7 @@ class GetMyTicketsUseCase
   Future<DataState<List<Ticket>>> call({
     required GetMyTicketsUseCaseParam param,
   }) async {
+
     return await ticketRepository.getMyTickets();
   }
 }
