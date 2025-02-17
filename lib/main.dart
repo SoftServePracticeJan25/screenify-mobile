@@ -7,12 +7,18 @@ import 'package:screenify/features/movie/presentation/blocs/app_bloc/app_bloc.da
 import 'package:screenify/features/movie/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:screenify/features/movie/presentation/blocs/movie_bloc/movie_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/review_bloc/review_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/room_bloc/room_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/session_bloc/session_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/ticket_bloc/ticket_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:screenify/features/movie/presentation/screens/home_screen_wrapper.dart';
 import 'package:screenify/features/movie/presentation/screens/welcome_screen.dart';
+import 'package:screenify/features/movie/presentation/shared/screenify_progress_indicator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  injectDependencies();
+  const DependencyInjection().injectDependencies();
   runApp(const Screenify());
 }
 
@@ -31,6 +37,21 @@ class Screenify extends StatelessWidget {
         ),
         BlocProvider<MovieBloc>(
           create: (_) => MovieBloc(),
+        ),
+        BlocProvider<ReviewBloc>(
+          create: (_) => ReviewBloc(),
+        ),
+        BlocProvider<SessionBloc>(
+          create: (_) => SessionBloc(),
+        ),
+        BlocProvider<RoomBloc>(
+          create: (_) => RoomBloc(),
+        ),
+        BlocProvider<TransactionBloc>(
+          create: (_) => TransactionBloc(),
+        ),
+        BlocProvider<TicketBloc>(
+          create: (_) => TicketBloc(),
         ),
       ],
       child: BlocBuilder<AppBloc, AppState>(
@@ -66,17 +87,11 @@ class Screenify extends StatelessWidget {
                 }
               },
               listener: (context, state) async {
-                if (state is AuthFailed) {
-                  print(state.message);
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(state.message)));
-                } else if (state is AuthLoading) {
+                if (state is AuthLoading) {
                   await showDialog(
                     context: context,
                     builder: (_) {
-                      return const CircularProgressIndicator.adaptive();
+                      return const ScreenifyProgressIndicator();
                     },
                   );
                 } else {

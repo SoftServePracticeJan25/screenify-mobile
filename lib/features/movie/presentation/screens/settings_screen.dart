@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:screenify/config/constants/app_colors.dart';
 import 'package:screenify/config/constants/app_images.dart';
-import 'package:screenify/features/movie/domain/entities/user_info.dart';
 import 'package:screenify/features/movie/presentation/blocs/app_bloc/app_bloc.dart';
 import 'package:screenify/features/movie/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,10 +15,11 @@ class SettingsScreen extends StatelessWidget {
 
   Future<void> _takePhoto(BuildContext context) async {
     final ImagePicker imagePicker = ImagePicker();
+    final authBloc = context.read<AuthBloc>();
     final XFile? image =
         await imagePicker.pickImage(source: ImageSource.camera);
     if (image == null) return;
-    context.read<AuthBloc>().add(UploadAvatarEvent(file: image));
+    authBloc.add(UploadAvatarEvent(file: image));
   }
 
   Widget _settingsTile(String title, Widget child, BuildContext context) {
@@ -51,7 +51,6 @@ class SettingsScreen extends StatelessWidget {
     //     (context.watch<AuthBloc>().state as AuthLoaded).userInfo;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        print((state as AuthLoaded).userInfo.hashCode);
         final userInfo = (state as AuthLoaded).userInfo;
         return Container(
           decoration: BoxDecoration(

@@ -2,7 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:screenify/config/constants/app_images.dart';
 import 'package:screenify/features/movie/domain/entities/movie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:screenify/features/movie/presentation/screens/movie_description_screen.dart';
 import 'package:screenify/features/movie/presentation/screens/session_screen.dart';
+
+String formatDuration(Duration duration) {
+  int hours = duration.inHours;
+  int minutes = duration.inMinutes.remainder(60);
+
+  if (hours > 0) {
+    return '${hours}h ${minutes}m';
+  } else {
+    return '${minutes}m';
+  }
+}
 
 class MovieDetailsScreen extends StatefulWidget {
   final List<Movie> movies;
@@ -31,7 +43,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     );
     _currentPageNotifier = ValueNotifier(widget.movieIndex);
 
-    // Listen to page changes
     _controller.addListener(() {
       int newPage = _controller.page?.round() ?? widget.movieIndex;
       if (_currentPageNotifier.value != newPage) {
@@ -47,16 +58,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     super.dispose();
   }
 
-  String formatDuration(Duration duration) {
-    int hours = duration.inHours;
-    int minutes = duration.inMinutes.remainder(60);
 
-    if (hours > 0) {
-      return '${hours}h ${minutes}m';
-    } else {
-      return '${minutes}m';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,29 +103,44 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    height:
-                                        MediaQuery.sizeOf(context).height / 2 +
-                                            (factor * 30),
-                                    width:
-                                        MediaQuery.sizeOf(context).width / 1.2,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color(0xFF9747FF),
-                                        width: 1,
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              MovieDescriptionScreen(
+                                            movie: movie,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      height:
+                                          MediaQuery.sizeOf(context).height /
+                                                  2 +
+                                              (factor * 30),
+                                      width: MediaQuery.sizeOf(context).width /
+                                          1.2,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const Color(0xFF9747FF),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(45),
+                                        image: movie.posterUrl.isNotEmpty
+                                            ? DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(
+                                                  movie.posterUrl,
+                                                ),
+                                              )
+                                            : null,
                                       ),
-                                      borderRadius: BorderRadius.circular(45),
-                                      image: movie.posterUrl.isNotEmpty
-                                          ? DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                movie.posterUrl,
-                                              ),
-                                            )
-                                          : null,
                                     ),
                                   ),
                                   Text(
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 2,
                                     movie.title,
                                     style: Theme.of(context)
                                         .textTheme

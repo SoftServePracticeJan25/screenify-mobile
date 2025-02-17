@@ -10,6 +10,16 @@ class AppTextTheme {
       fontSize: 30,
       fontFamily: "Roboto",
     ),
+    headlineMedium: const TextStyle().copyWith(
+      fontFamily: "Nunito",
+      fontSize: 28,
+      fontWeight: FontWeight.w700,
+    ),
+    headlineSmall: const TextStyle().copyWith(
+      fontFamily: "Nunito",
+      fontSize: 24,
+      fontWeight: FontWeight.w700,
+    ),
     displayLarge: const TextStyle().copyWith(
       fontFamily: "Poppins",
       fontSize: 48,

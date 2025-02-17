@@ -14,7 +14,7 @@ part 'movie_event.dart';
 part 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
-  final MovieRepository movieRepository = GetIt.I<MovieRepository>();
+  final MovieRepository _movieRepository = GetIt.I<MovieRepository>();
 
   MovieBloc() : super(const MovieInitial()) {
     on<GetAllMoviesEvent>(_onGetAllMovies);
@@ -26,9 +26,9 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   ) async {
     emit(const MovieLoading());
     final responseAll = await GetAllMoviesUseCase(
-        movieRepository: movieRepository)(param: GetAllMoviesUseCaseParam());
+        movieRepository: _movieRepository)(param: GetAllMoviesUseCaseParam());
     final responseRecommended =
-        await GetRecommendedMoviesUseCase(movieRepository: movieRepository)(
+        await GetRecommendedMoviesUseCase(movieRepository: _movieRepository)(
       param: GetRecommendedMoviesUseCaseParam(),
     );
 

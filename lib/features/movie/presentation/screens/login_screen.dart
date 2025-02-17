@@ -30,7 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthLoaded) {
+        if (state is AuthFailed) {
+          print(state.message);
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.message)));
+        } else if (state is AuthLoaded) {
           Navigator.popUntil(context, (route) => route.isFirst);
         }
       },
@@ -63,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Container(
-                          height: MediaQuery.sizeOf(context).height/1.7,
+                          height: MediaQuery.sizeOf(context).height / 1.7,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.3),

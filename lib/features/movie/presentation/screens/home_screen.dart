@@ -4,6 +4,7 @@ import 'package:screenify/config/constants/app_colors.dart';
 import 'package:screenify/config/constants/app_images.dart';
 import 'package:screenify/features/movie/presentation/blocs/movie_bloc/movie_bloc.dart';
 import 'package:screenify/features/movie/presentation/screens/movie_details_screen.dart';
+import 'package:screenify/features/movie/presentation/shared/screenify_progress_indicator.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -33,7 +34,7 @@ class HomeScreen extends StatelessWidget {
             await showDialog(
               context: context,
               builder: (_) {
-                return const CircularProgressIndicator.adaptive();
+                return const ScreenifyProgressIndicator();
               },
             );
           } else {

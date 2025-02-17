@@ -56,7 +56,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               OutlinedButton(
-                style: AppOutlinedButtonTheme.lightOutlinedButtonTheme.style,
+                style: AppOutlinedButtonTheme.darkOutlinedButtonTheme.style,
                 onPressed: () async {
                   Navigator.of(context).push(
                     MaterialPageRoute(

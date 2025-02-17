@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:screenify/config/constants/app_images.dart';
 import 'package:screenify/features/movie/presentation/blocs/movie_bloc/movie_bloc.dart';
+import 'package:screenify/features/movie/presentation/blocs/ticket_bloc/ticket_bloc.dart';
 import 'package:screenify/features/movie/presentation/screens/home_screen.dart';
 import 'package:screenify/features/movie/presentation/screens/settings_screen.dart';
 import 'package:screenify/features/movie/presentation/screens/tickets_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
   const HomeScreenWrapper({super.key});
@@ -25,6 +27,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
   void initState() {
     super.initState();
     context.read<MovieBloc>().add(const GetAllMoviesEvent());
+    context.read<TicketBloc>().add(const GetMyTicketsEvent());
   }
 
   @override
@@ -52,7 +55,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
               width: 22,
               height: 22,
             ),
-            label: "Home",
+            label: AppLocalizations.of(context)!.home,
           ),
           BottomNavigationBarItem(
             activeIcon: Image.asset(
@@ -65,7 +68,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
               width: 22,
               height: 22,
             ),
-            label: "Tickets",
+            label: AppLocalizations.of(context)!.tickets,
           ),
           BottomNavigationBarItem(
             activeIcon: Image.asset(
@@ -78,7 +81,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
               width: 22,
               height: 22,
             ),
-            label: "Profile",
+            label: AppLocalizations.of(context)!.profile,
           ),
         ],
       ),

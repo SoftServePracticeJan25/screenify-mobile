@@ -49,6 +49,7 @@ class MovieRepositoryImpl implements MovieRepository {
       final token = await service.readToken();
       final url = Uri.parse("$_movieUrl/recommended");
       final response = await client.get(
+
         url,
         headers: {
           'Authorization': "Bearer $token",

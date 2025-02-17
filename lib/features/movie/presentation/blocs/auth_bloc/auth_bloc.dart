@@ -17,9 +17,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final SecureStorageService secureStorageService =
+  final SecureStorageService _secureStorageService =
       GetIt.I<SecureStorageService>();
-  final AuthRepository authRepository = GetIt.I<AuthRepository>();
+  final AuthRepository _authRepository = GetIt.I<AuthRepository>();
 
   AuthBloc() : super(const AuthInitial()) {
     on<UploadAvatarEvent>(_onAvatarUploaded);
@@ -35,19 +35,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthLoading());
-    await secureStorageService.deleteTokens();
+    await _secureStorageService.deleteTokens();
     emit(const AuthInitial());
   }
 
   FutureOr<void> _onChecked(CheckEvent event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
-    final String? token = await secureStorageService.readToken();
-    final String? refreshToken = await secureStorageService.readRefreshToken();
+    final String? token = await _secureStorageService.readToken();
+    final String? refreshToken = await _secureStorageService.readRefreshToken();
     if (token != null && refreshToken != null) {
       try {
         add(RefreshTokenEvent(refreshToken: refreshToken));
       } catch (e) {
-        await secureStorageService.deleteTokens();
+        await _secureStorageService.deleteTokens();
         emit(const AuthInitial());
       }
     } else {
@@ -61,7 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(const AuthLoading());
     try {
-      final authResponse = await authRepository.register(
+      final authResponse = await _authRepository.register(
         RegisterRequest(
           username: event.username,
           email: event.email,
@@ -70,10 +70,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       if (authResponse is DataSuccess) {
         final authData = authResponse.data!;
-        secureStorageService
+        _secureStorageService
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
-        final userInfo = await authRepository.getUserInfo(authData.accessToken);
+        final userInfo = await _authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -91,16 +91,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
 
     try {
-      final authResponse = await authRepository.login(
+      final authResponse = await _authRepository.login(
         LoginRequest(username: event.username, password: event.password),
       );
       if (authResponse is DataSuccess) {
         final authData = authResponse.data!;
-        secureStorageService
+        _secureStorageService
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
 
-        final userInfo = await authRepository.getUserInfo(authData.accessToken);
+        final userInfo = await _authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -121,13 +121,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
     try {
       final authResponse =
-          await authRepository.refreshToken(event.refreshToken);
+          await _authRepository.refreshToken(event.refreshToken);
       if (authResponse is DataSuccess) {
         final authData = authResponse.data!;
-        secureStorageService
+        _secureStorageService
           ..writeToken(authData.accessToken)
           ..writeRefreshToken(authData.refreshToken);
-        final userInfo = await authRepository.getUserInfo(authData.accessToken);
+        final userInfo = await _authRepository.getUserInfo(authData.accessToken);
         if (userInfo is DataSuccess) {
           emit(AuthLoaded(userInfo: userInfo.data!));
         } else {
@@ -145,7 +145,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     UploadAvatarEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final userInfo = await authRepository.uploadAvatar(event.file);
+    final userInfo = await _authRepository.uploadAvatar(event.file);
     if (userInfo is DataSuccess) {
       emit(AuthLoaded(userInfo: userInfo.data!));
     }
